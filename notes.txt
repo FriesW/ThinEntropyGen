@@ -1,0 +1,6 @@
+apt-get install libssl-dev
+
+gcc source.c -lcrypto -o file.out
+
+echo -n 'data to hash' | sha512sum
+OR direct sha512sum followed by ctrl-D
