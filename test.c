@@ -50,7 +50,7 @@ int main(int ac, char** argv){
 
     for(uint i = 0; i < BUFF_SIZE; i++) {
         if(i == 0);
-        else if(i % DIGEST_LEN == 0) printf("\n\n"); //TODO check
+        else if(i % DIGEST_LEN == 0) printf("\n\n");
         else if(i % 16 == 0) printf("\n");
         else if(i % 2 == 0) printf(" ");
         printf("%02X", buffer[i] & 0xFF);
