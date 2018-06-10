@@ -33,8 +33,10 @@ int main(int ac, char** argv){
     const uint BUFF_SIZE = hash_count_at(TREE_DEPTH) * DIGEST_LEN;
     char buffer[BUFF_SIZE];
 
-    for(uint i = 0; i < BUFF_SIZE; i++)
-        buffer[i] = i % 255;
+    //while(true) {
+
+    for(uint i = 0; i < DIGEST_LEN; i++)
+        buffer[i] = i % 255; //TODO consume source or STDIN
 
     for(uint level = 2; level <= TREE_DEPTH; level++) {
         for(uint hash_index = hash_count_at(level) - 1; //Count to index
@@ -65,7 +67,7 @@ int main(int ac, char** argv){
     }
 
 
-    printf("\n Final Out\n");
+    printf("\nFinal Out\n");
     for(uint i = 0; i < BUFF_SIZE; i++) {
         if(i == 0);
         else if(i % DIGEST_LEN == 0) printf("\n\n");
@@ -75,6 +77,11 @@ int main(int ac, char** argv){
     }
     //printf("%s", hash);
     printf("\n");
+
+
+    //} //End while(true)
+
+
     return 0;
 
 }
