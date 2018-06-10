@@ -67,6 +67,7 @@ int main(int ac, char** argv){
     }
 
 
+    /*
     printf("\nFinal Out\n");
     for(uint i = 0; i < BUFF_SIZE; i++) {
         if(i == 0);
@@ -75,9 +76,9 @@ int main(int ac, char** argv){
         else if(i % 2 == 0) printf(" ");
         printf("%02X", buffer[i] & 0xFF);
     }
-    //printf("%s", hash);
-    printf("\n");
-
+    */
+    for(uint i = 0; i < BUFF_SIZE; i++)
+        printf("%c", buffer[i]); //TODO efficiency? Char by char vs full buffer?
 
     //} //End while(true)
 

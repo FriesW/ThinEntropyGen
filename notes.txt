@@ -2,5 +2,9 @@ apt-get install libssl-dev
 
 clear; gcc source.c -lcrypto -o file.out && ./file.out
 
+./file.out | hexdump
+./file.out > output.txt
+cat output.txt | hexdump
+
 echo -n 'data to hash' | sha512sum
 OR direct sha512sum followed by ctrl-D
