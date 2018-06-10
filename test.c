@@ -3,7 +3,7 @@
 
 typedef unsigned int uint;
 
-#define TREE_DEPTH 4 
+#define TREE_DEPTH 4
 #define DIGEST_LEN SHA512_DIGEST_LENGTH
 #define DIGEST SHA512
 
@@ -35,14 +35,16 @@ int main(int ac, char** argv){
     char data[] = "data to hash";
     char buffer[BUFF_SIZE];
 
-    for(uint level = 1; level <= TREE_DEPTH; level++) {
+    for(uint level = 2; level <= TREE_DEPTH; level++) {
         for(uint hash_index = hash_count_at(level) - 1; //Count to index
          hash_index != -1; hash_index--) {
+            /*
             printf("Level: %i", level);
             printf("\tHash ind: %i", hash_index);
             printf("\tHash pos: %i", offset_hash_at(hash_index));
             printf("\tHash src pos: %i", offset_source_at(hash_index));
             printf("\n");
+            */
         }
     }
 
