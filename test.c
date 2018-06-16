@@ -3,14 +3,23 @@
 
 typedef unsigned int uint;
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_TREE
-//#define CONTINUOUS
+#define CONTINUOUS
 
-#define TREE_DEPTH 6
+#define HASH_INPUT
+#define TREE_DEPTH 3
 #define SEED_SIZE 10
+
 #define DIGEST_LEN SHA512_DIGEST_LENGTH
 #define DIGEST SHA512
+
+#ifdef HASH_INPUT
+    #define START 1
+#else
+    #define START 2
+#endif
+
 
 uint square(uint base, uint exp) {
     uint out = 1;
@@ -59,7 +68,7 @@ int main(int ac, char** argv){
     #endif
  
 
-    for(uint level = 2; level <= TREE_DEPTH; level++) {
+    for(uint level = START; level <= TREE_DEPTH; level++) {
         for(uint hash_index = hash_count_at(level) - 1; //Count to index
          hash_index != -1; hash_index--) {
             
