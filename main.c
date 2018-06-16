@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <openssl/sha.h>
 
 typedef unsigned int uint;
@@ -7,9 +8,9 @@ typedef unsigned int uint;
 //#define DEBUG_TREE
 #define CONTINUOUS
 
-#define HASH_INPUT
-#define TREE_DEPTH 3
-#define SEED_SIZE 10
+//#define HASH_INPUT
+#define TREE_DEPTH 16
+#define SEED_SIZE 512
 
 #define DIGEST_LEN SHA512_DIGEST_LENGTH
 #define DIGEST SHA512
@@ -45,7 +46,7 @@ uint hash_count_at(uint level) {
 int main(int ac, char** argv){
 
     const uint BUFF_SIZE = hash_count_at(TREE_DEPTH) * DIGEST_LEN;
-    char buffer[BUFF_SIZE];
+    char *buffer = malloc(BUFF_SIZE);
 
     FILE *fp;
     fp = freopen(NULL, "rb", stdin);
@@ -57,6 +58,7 @@ int main(int ac, char** argv){
     uint read_len = fread(buffer, 1, SEED_SIZE, fp);
     if(read_len != SEED_SIZE) {
         fprintf(stderr, "STDIN error.");
+        free(buffer);
 	return 1;
     }
     
@@ -119,6 +121,7 @@ int main(int ac, char** argv){
     #endif
 
 
+    free(buffer);
     return 0;
 
 }
