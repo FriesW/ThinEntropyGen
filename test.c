@@ -4,6 +4,7 @@
 typedef unsigned int uint;
 
 #define DEBUG
+//#define DEBUG_TREE
 //#define CONTINUOUS
 
 #define TREE_DEPTH 6
@@ -37,18 +38,32 @@ int main(int ac, char** argv){
     const uint BUFF_SIZE = hash_count_at(TREE_DEPTH) * DIGEST_LEN;
     char buffer[BUFF_SIZE];
 
+    FILE *fp;
+    fp = freopen(NULL, "rb", stdin);
+
     #ifdef CONTINUOUS
     while(1) {
     #endif
 
-    for(uint i = 0; i < DIGEST_LEN; i++)
-        buffer[i] = i % 255; //TODO consume source or STDIN
+    uint read_len = fread(buffer, 1, SEED_SIZE, fp);
+    if(read_len != SEED_SIZE) {
+        fprintf(stderr, "STDIN error.");
+	return 1;
+    }
+    
+
+    #ifdef DEBUG
+    printf("Input seed read %i bytes: ", read_len);
+    fwrite(buffer, 1, SEED_SIZE, stdout);
+    printf("\n");
+    #endif
+ 
 
     for(uint level = 2; level <= TREE_DEPTH; level++) {
         for(uint hash_index = hash_count_at(level) - 1; //Count to index
          hash_index != -1; hash_index--) {
             
-            #ifdef DEBUG
+            #ifdef DEBUG_TREE
             printf("\n");
             printf("Level: %i", level);
             printf("\tHash ind: %i", hash_index);
