@@ -8,18 +8,12 @@ typedef unsigned int uint;
 //#define DEBUG_TREE
 #define CONTINUOUS
 
-//#define HASH_INPUT
+#define HASH_INPUT
 #define TREE_DEPTH 16
-#define SEED_SIZE 512
+#define SEED_SIZE 64
 
 #define DIGEST_LEN SHA512_DIGEST_LENGTH
 #define DIGEST SHA512
-
-#ifdef HASH_INPUT
-    #define START 1
-#else
-    #define START 2
-#endif
 
 
 uint square(uint base, uint exp) {
@@ -57,7 +51,7 @@ int main(int ac, char** argv){
 
     uint read_len = fread(buffer, 1, SEED_SIZE, fp);
     if(read_len != SEED_SIZE) {
-        fprintf(stderr, "STDIN error.");
+        fprintf(stderr, "STDIN error.\n");
         free(buffer);
 	return 1;
     }
@@ -68,9 +62,14 @@ int main(int ac, char** argv){
     fwrite(buffer, 1, SEED_SIZE, stdout);
     printf("\n");
     #endif
- 
-
-    for(uint level = START; level <= TREE_DEPTH; level++) {
+    
+    
+    #ifdef HASH_INPUT
+        DIGEST(buffer, SEED_SIZE, buffer);
+    #endif
+    
+    
+    for(uint level = 2; level <= TREE_DEPTH; level++) {
         for(uint hash_index = hash_count_at(level) - 1; //Count to index
          hash_index != -1; hash_index--) {
             
