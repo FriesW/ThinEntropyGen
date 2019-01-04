@@ -77,7 +77,7 @@ void loop()
         debug_w_full = true;
     #endif
     
-    if(buffer->est_length() == 0){
+    if(buffer->length() == 0){
         return;
     }
     int res = buffer->safe_read();

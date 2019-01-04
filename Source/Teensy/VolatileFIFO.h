@@ -12,27 +12,18 @@ class VolatileFIFO {
     
     public:
     
-        //Constructor
+        //Constructors
         VolatileFIFO();
-        
         VolatileFIFO(int blocking);
         
-        //Destructor
-        virtual ~VolatileFIFO(); //TODO is this needed?
-        
         //Returns 1 (true) if buffer is full
-        int safe_isFull() const;
         int isFull() const;
         
         //Returns 1 (true) if buffer is empty
-        int safe_isEmpty() const;
         int isEmpty() const;
         
-        //Returns used size of buffer
+        //Returns used size of buffer (doesn't disable interrupts, is atomic)
         unsigned int length() const;
-        
-        //Returns used size of buffer without disabling interrupts
-        unsigned int est_length() const;
         
         //Write a byte into buffer
         int write(uint8_t value);
@@ -41,8 +32,7 @@ class VolatileFIFO {
         //Read a byte from buffer
         int read();
         int safe_read();
-        
-    //protected: //TODO is this needed?
+    
     private:
     
         void inc_f();

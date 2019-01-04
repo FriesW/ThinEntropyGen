@@ -4,30 +4,16 @@ VolatileFIFO::VolatileFIFO() {}
 VolatileFIFO::VolatileFIFO(int blocking) {
     block = blocking;
 }
-VolatileFIFO::~VolatileFIFO() {}
 
-int VolatileFIFO::safe_isFull() const {
+int VolatileFIFO::isFull() const {
     return length() == BUFFER_SIZE;
 }
-int VolatileFIFO::isFull() const {
-    return est_length() == BUFFER_SIZE;
-}
 
-int VolatileFIFO::safe_isEmpty() const {
-    return length() == 0;
-}
 int VolatileFIFO::isEmpty() const {
-    return est_length() == 0;
+    return length() == 0;
 }
 
 unsigned int VolatileFIFO::length() const {
-    unsigned int length_c;
-    __disable_irq();
-    length_c = buf_len;
-    __enable_irq();
-    return length_c;
-}
-unsigned int VolatileFIFO::est_length() const {
     return buf_len;
 }
 
