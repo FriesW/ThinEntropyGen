@@ -40,12 +40,8 @@ void setup()
     //Finish initialization
     out_buff[OUT_SIZE] = '\n';
     
-    //Actual setup
-    
+    //Debug led as output
     pinMode(PING_PIN, OUTPUT);
-
-    for (uint i=0; i < NVIC_NUM_INTERRUPTS; i++) NVIC_SET_PRIORITY(i, 128);  //The Teensy LC only uses interrupt priorities of 0, 64, 128, 192, 255
-    NVIC_SET_PRIORITY(IRQ_ADC0,64);  // The ADC ISR must have a higher priority (lower number) than the USB ISR
 
     //ADC_REF_3V3, ADC_REF_EXT
     adc->setReference(ADC_REFERENCE::REF_3V3, ADC_0);
