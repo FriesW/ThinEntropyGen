@@ -5,6 +5,8 @@ typedef unsigned long ulong;
 #include "VolatileFIFO.h"
 #include "Base64Encode.h"
 
+#define DEBUG
+
 #define NOISE_SOURCE A9 //TODO set pin, I think A0-A9 is valid
 
 //Status / alive LED
@@ -20,8 +22,21 @@ uint out_p = 0;
 VolatileFIFO *buffer = new VolatileFIFO();
 ADC *adc = new ADC();
 
+#ifdef DEBUG
+    elapsedMillis debug_window;
+    ulong debug_buff_reads;
+    ulong debug_data_transfer;
+    bool debug_w_empty;
+    bool debug_w_full;
+    #define DEBUG_RESET debug_w_full = debug_w_empty = 0; debug_data_transfer = debug_buff_reads = debug_window = 0
+#endif
+
 void setup()
 {
+    #ifdef DEBUG
+    DEBUG_RESET;
+    #endif
+    
     //Finish initialization
     out_buff[OUT_SIZE] = '\n';
     
@@ -47,14 +62,36 @@ void setup()
     adc->enableInterrupts(ADC_0);
 }
 
+
 void loop()
 {
-    if(buffer->est_length() == 0)
+    
+    #ifdef DEBUG
+    if(debug_window > 1000){
+        Serial.println("\nDBP");
+        Serial.println(debug_buff_reads);
+        Serial.println(debug_data_transfer);
+        Serial.println(debug_w_empty);
+        Serial.println(debug_w_full);
+        DEBUG_RESET;
+    }
+    if(buffer->isEmpty())
+        debug_w_empty = true;
+    if(buffer->isFull())
+        debug_w_full = true;
+    #endif
+    
+    if(buffer->est_length() == 0){
         return;
+    }
     int res = buffer->safe_read();
-    if(res == 0)
+    if(res == 0) 
         return;
     byte d = res;
+    
+    #ifdef DEBUG
+    debug_buff_reads++;
+    #endif
     
     
     for(uint i = 0; i < 4; i++){
@@ -89,7 +126,11 @@ void loop()
         
         //If a line, then dump
         if(out_p == OUT_SIZE) {
+            #ifdef DEBUG
+            debug_data_transfer += OUT_SIZE;
+            #else
             Serial.write(out_buff, OUT_SIZE+1);
+            #endif
             out_p = 0;
         }
     }
