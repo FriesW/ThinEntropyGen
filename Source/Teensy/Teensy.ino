@@ -53,7 +53,8 @@ void setup()
     out_buff[OUT_SIZE] = '\r';
     out_buff[OUT_SIZE+1] = '\n';
     
-    //Debug led as output
+    //Output
+    Serial.begin(-1);
     pinMode(PING_PIN, OUTPUT);
 
     //ADC_REF_3V3, ADC_REF_EXT
@@ -84,6 +85,9 @@ void loop()
         Serial.println(debug_w_full);
         DEBUG_RESET;
     }
+    
+    while(Serial.read() != -1);
+    
     if(buffer->isEmpty())
         debug_w_empty = true;
     if(buffer->isFull())
