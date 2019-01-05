@@ -16,7 +16,7 @@ elapsedMillis last_ping = 0;
 
 //Character output buffer
 #define OUT_SIZE 76
-char out_buff[OUT_SIZE+1];
+char out_buff[OUT_SIZE+2];
 uint out_p = 0;
 
 VolatileFIFO *buffer = new VolatileFIFO();
@@ -38,7 +38,8 @@ void setup()
     #endif
     
     //Finish initialization
-    out_buff[OUT_SIZE] = '\n';
+    out_buff[OUT_SIZE] = '\r';
+    out_buff[OUT_SIZE+1] = '\n';
     
     //Debug led as output
     pinMode(PING_PIN, OUTPUT);
@@ -125,7 +126,7 @@ void loop()
             #ifdef DEBUG
             debug_data_transfer += OUT_SIZE;
             #else
-            Serial.write(out_buff, OUT_SIZE+1);
+            Serial.write(out_buff, OUT_SIZE+2);
             #endif
             out_p = 0;
         }
