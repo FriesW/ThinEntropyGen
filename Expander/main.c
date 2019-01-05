@@ -9,7 +9,7 @@ typedef unsigned int uint;
 #define CONTINUOUS
 
 #define HASH_INPUT
-#define TREE_DEPTH 16
+#define TREE_DEPTH 15
 #define SEED_SIZE 64
 
 #define DIGEST_LEN SHA512_DIGEST_LENGTH
