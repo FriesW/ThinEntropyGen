@@ -56,7 +56,8 @@ Arduino boards are very slow.
 
 Seed OS entropy source.
 ```
-minicom -D /dev/ttyACM[] > /dev/random
+stty -F /dev/ttyACM[] raw #For Teensy: setup comport mode
+cat /dev/ttyACM[] | base64 --decode > /dev/random
 ```
 
 Note: this will not update `entropy_count` and unlock `/dev/random`. To do so
@@ -77,13 +78,29 @@ For more info, see:
 Fill a hard drive with randomness and print completion time.
 Useful for erasing drives or preparing a new drive for an encrypted partition.
 ```
-minicom -D /dev/ttyACM[] | base64 --decode | ./expander | \
+cat /dev/ttyACM[] | base64 --decode | ./expander | \
 dd of=/dev/sd[] bs=4M status=progress conv=fdatasync \
 ; date
 ```
 The combination of a Teensy LC `Source` and the `Expander` will
 produce around 195 Mbytes/sec.
 
+## Benchmarking
+
+Source
+```
+cat /dev/ttyACM[] | base64 -d | dd of=/dev/null bs=1k status=progress
+```
+
+Expander
+```
+cat /dev/zero | ./expander | dd of=/dev/null bs=10k status=progress
+```
+
+Source -> Expander
+```
+cat /dev/ttyACM[] | base64 -d | ./expander | dd of=/dev/null bs=10k status=progress
+```
 
 
 ## TODO
