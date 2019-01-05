@@ -1,57 +1,88 @@
-// Arduino nano
-// Sends random data through serial line,
-// for use in SBC or VMs
-//
-// Use the following guides to understand and seed /dev/random
-// https://security.stackexchange.com/a/69433
-// https://www.certdepot.net/rhel7-get-started-random-number-generator/
+/*
+Generates entropy/noise based on ADC LSB.
+Outputs in base64 encoded lines.
+Probably very very slow.
 
-const int source[] = {A0, A1, A2, A3, A4, A5, A6, A7};
-const int size = sizeof(source)/sizeof(int);
+Tolchain: Arduino (1.8.5)
+Board: Arduino Nano/Uno or ATmega328P based
+*/
 
-const int status_pin = 13;
+typedef unsigned int uint;
+typedef unsigned long ulong;
 
-const unsigned long refresh = 100;
-unsigned long last = 0;
+#include "Base64Encode.h"
+
+
+#define NOISE_SOURCE A0
+
+#define PING_INTERVAL 100 //msec
+#define PING_PIN 13 //LED pin
+ulong last_ping = 0;
+
+//Output
+#define OUT_SIZE 76 //Base64 chars per line
+#define BAUD 115200
 
 void setup() {
-    Serial.begin(9600);
-    pinMode(status_pin, OUTPUT);
-    digitalWrite(status_pin, LOW);
+    Serial.begin(BAUD);
+    pinMode(PING_PIN, OUTPUT);
 }
 
-byte accumulate = 0;
-char out = 0;
 
 void loop() {
-  
-    byte s1 = get();
-    byte s2 = get();
     
-    if(s1 == s2) return;
-    
-    if( millis() - refresh > last ) {
-        digitalWrite(status_pin, s1);
-        last = millis();
-        return;
+    uint lw = 0;
+    while(lw < OUT_SIZE){
+        byte s1 = get();
+        byte s2 = get();
+        
+        //Whitening
+        if(s1 == s2) continue;
+        
+        //The random bit
+        byte rb = s1;
+        
+        //Heartbeat
+        ulong t = millis();
+        if(t - last_ping > PING_INTERVAL){
+            last_ping = t;
+            digitalWrite(PING_PIN, rb);
+            continue;
+        }
+        
+        //Build base64 char
+        int res = base64_builder(rb);
+        
+        //Print new chars
+        if(res != -1){
+            lw++;
+            Serial.print((char)res);
+        }
+        
     }
-    
-    out = out << 1;
-    out += s1;
-    accumulate++;
-    
-    if(accumulate == 8) {
-        Serial.print(out);
-        out = 0;
-        accumulate = 0;
-    }
+    Serial.println();
     
 }
 
+int base64_builder(byte next_bit){
+    static byte accum = 0;
+    static byte a_len = 0;
+    
+    int out = -1;
+    
+    accum = accum << 1;
+    accum += next_bit;
+    a_len++;
+    
+    if(a_len == 6){
+        out = base64enc(accum);
+        accum = 0;
+        a_len = 0;
+    }
+    
+    return out;
+}
 
 byte get(){
-    byte e = 0;
-    for(byte i = 0; i < size; i++)
-        e ^= 1 & analogRead(source[i]);
-    return e;
+    return 1 & analogRead(NOISE_SOURCE);
 }
