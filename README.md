@@ -17,7 +17,7 @@ Software depends on `libssl-dev`, and is compiled by `gcc` with the `-lcrypto` f
 ```
 apt install libssl-dev
 cd [repo]/Expander
-gcc main.c -lcrypto -o expander
+gcc main.c -Wall -lcrypto -o expander
 head -c 64 /dev/urandom | ./expander | hexdump | less
 ```
 

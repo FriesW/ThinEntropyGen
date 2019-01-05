@@ -40,7 +40,7 @@ uint hash_count_at(uint level) {
 int main(int ac, char** argv){
 
     const uint BUFF_SIZE = hash_count_at(TREE_DEPTH) * DIGEST_LEN;
-    char *buffer = malloc(BUFF_SIZE);
+    unsigned char *buffer = malloc(BUFF_SIZE);
 
     FILE *fp;
     fp = freopen(NULL, "rb", stdin);
