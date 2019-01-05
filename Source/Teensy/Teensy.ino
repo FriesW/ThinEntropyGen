@@ -1,3 +1,15 @@
+/*
+Generates entropy/noise based on ADC LSB.
+Outputs in base64 encoded lines.
+Generates approx 12,500 bytes/sec of entropy
+
+Toolchain: Arduino (1.8.5) with Teensy Loader (1.41) addon
+Board: Teensy LC
+USB: Serial
+CPU: 48 MHz
+Optimize: Fastest with LTO
+*/
+
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
@@ -5,9 +17,9 @@ typedef unsigned long ulong;
 #include "VolatileFIFO.h"
 #include "Base64Encode.h"
 
-#define DEBUG
+//#define DEBUG
 
-#define NOISE_SOURCE A9 //TODO set pin, I think A0-A9 is valid
+#define NOISE_SOURCE A9 //A0-A9
 
 //Status / alive LED
 #define PING_INTERVAL 100 //msec
