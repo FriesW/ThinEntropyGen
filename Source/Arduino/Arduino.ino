@@ -60,7 +60,7 @@ void loop() {
         }
         
     }
-    Serial.println();
+    Serial.print('\n');
     
 }
 

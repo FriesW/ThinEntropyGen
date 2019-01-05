@@ -28,7 +28,7 @@ elapsedMillis last_ping = 0;
 
 //Character output buffer
 #define OUT_SIZE 76
-char out_buff[OUT_SIZE+2];
+char out_buff[OUT_SIZE+1];
 uint out_p = 0;
 
 VolatileFIFO *buffer = new VolatileFIFO();
@@ -50,8 +50,7 @@ void setup()
     #endif
     
     //Finish initialization
-    out_buff[OUT_SIZE] = '\r';
-    out_buff[OUT_SIZE+1] = '\n';
+    out_buff[OUT_SIZE] = '\n';
     
     //Output
     Serial.begin(-1);
@@ -142,7 +141,7 @@ void loop()
             #ifdef DEBUG
             debug_data_transfer += OUT_SIZE;
             #else
-            Serial.write(out_buff, OUT_SIZE+2);
+            Serial.write(out_buff, OUT_SIZE+1);
             #endif
             out_p = 0;
         }
