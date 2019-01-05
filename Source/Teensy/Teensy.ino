@@ -81,7 +81,7 @@ void loop()
         return;
     }
     int res = buffer->safe_read();
-    if(res == 0) 
+    if(res == -1) 
         return;
     byte d = res;
     
