@@ -11,6 +11,8 @@ Was created to cheaply and quickly generate lots of entropy on a SBC with no ent
 
 #### Utility for stretching the length of entropy of a random input
 
+This utility is designed for high bandwidth, not high security. Only use this if `/dev/urandom` is too slow.
+
 Software depends on `libssl-dev`, and is compiled by `gcc` with the `-lcrypto` flag.
 
 #### Example
